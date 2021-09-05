@@ -3,6 +3,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+
 env = Environment(
     loader=FileSystemLoader('.'),
     autoescape=select_autoescape(['html', 'xml'])
@@ -24,8 +25,9 @@ rendered_page = template.render(
     years_of_life=str(get_years_of_life(1920, 365.25)),
 )
 
-with open('index.html', 'w', encoding="utf8") as file:
+with open('index.html', 'w', encoding='utf8') as file:
     file.write(rendered_page)
+
 
 server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
 server.serve_forever()

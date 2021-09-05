@@ -11,4 +11,8 @@ env/
 bar.py
 baz.py
 foo.py
-proba.py
+proba*
+index.html
+
+# Example dirs
+for_project/
