@@ -1,3 +1,4 @@
+from collections import defaultdict
 import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import pprint
@@ -35,11 +36,12 @@ def get_goods_by_categories(filename) -> Dict[str, List[Dict]]:
     # df_table_about_goods.columns = new_columns_names
     # df_table_about_goods.price = df_table_about_goods.price.astype(int)
 
+    initialized_dd = defaultdict(list)
     goods_by_categories = (
         df_table_about_goods.groupby('Категория')
                             .apply(lambda g: g.to_dict(orient='records'))
                             .apply(sort_)
-                            .to_dict()
+                            .to_dict(into=initialized_dd)
     )
 
     return goods_by_categories
