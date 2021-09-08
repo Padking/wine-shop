@@ -83,11 +83,13 @@ def main():
     goods_source_file = 'for_project/wine2.xlsx'
 
     template = env.get_template(html_template_name)
+    exclusive_category = 'Напитки'
 
     rendered_page = template.render(
         years_of_life=str(get_years_of_life(1920, 365.25)),
         goods_by_category=get_goods_by_categories(goods_source_file,
-                                                  columns_names_goods_mapper)
+                                                  columns_names_goods_mapper),
+        exclusive_category=exclusive_category
     )
 
     with open('index.html', 'w', encoding='utf8') as file:

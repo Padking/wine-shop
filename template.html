@@ -126,9 +126,11 @@
                       <div>
                         <h3 class="heading mt-3 mb-3 text-dark">{{good.name}}</h3>
                         <p>
-                          Сорт винограда - {{good.sort}}<br/>
-                          <span class="price">{{good.price}} р.</span>
-                        </p>
+                            {% if category_name != exclusive_category %}
+                              Сорт винограда - {{good.sort}}<br/>
+                            {% endif %}
+                            <span class="price">{{good.price}} р.</span>
+                          </p>
                       </div>
                     </div>
                   </div>
