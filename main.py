@@ -1,7 +1,6 @@
 from collections import defaultdict
 import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-import pprint
 from typing import Dict, List
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -17,28 +16,35 @@ def get_years_of_life(year_of_origin, avg_days_in_year):
     return years_of_life
 
 
-def get_wines(filename) -> List[Dict]:
-    new_columns_names = ['name', 'sort', 'price', 'image']
-    df_table_about_wines = pandas.read_excel(filename)
+def get_wines(filename, columns_names_wines_mapper) -> List[Dict]:
 
-    df_table_about_wines.columns = new_columns_names
-    df_table_about_wines.price = df_table_about_wines.price.astype(int)
+    df_table_about_wines = pandas.read_excel(filename, keep_default_na=False)
+    df_table_about_wines.rename(columns_names_wines_mapper, axis='columns',
+                                inplace=True, errors='raise')
+    df_table_about_wines.price = (
+        df_table_about_wines.price
+        .astype(int, errors='ignore')
+    )
 
     wines = df_table_about_wines.to_dict(orient='records')
 
     return wines
 
 
-def get_goods_by_categories(filename) -> Dict[str, List[Dict]]:
-    # new_columns_names = ['category', 'name', 'sort', 'price', 'image']
-    df_table_about_goods = pandas.read_excel(filename, keep_default_na=False)
+def get_goods_by_categories(filename,
+                            columns_names_goods_mapper) -> Dict[str, List[Dict]]:
 
-    # df_table_about_goods.columns = new_columns_names
-    # df_table_about_goods.price = df_table_about_goods.price.astype(int)
+    df_table_about_goods = pandas.read_excel(filename, keep_default_na=False)
+    df_table_about_goods.rename(columns_names_goods_mapper, axis='columns',
+                                inplace=True, errors='raise')
+    df_table_about_goods.price = (
+        df_table_about_goods.price
+        .astype(int, errors='ignore')
+    )
 
     initialized_dd = defaultdict(list)
     goods_by_categories = (
-        df_table_about_goods.groupby('Категория')
+        df_table_about_goods.groupby('category')
                             .apply(lambda g: g.to_dict(orient='records'))
                             .apply(sort_)
                             .to_dict(into=initialized_dd)
@@ -61,13 +67,27 @@ def main():
         autoescape=select_autoescape(['html', 'xml'])
     )
 
-    template = env.get_template('template.html')
+    columns_names_wines_mapper = {
+        'Название': 'name',
+        'Сорт': 'sort',
+        'Цена': 'price',
+        'Картинка': 'image'
+    }
 
-    pprint.pprint(get_goods_by_categories('for_project/wine2.xlsx'))
+    columns_names_goods_mapper = {
+        'Категория': 'category',
+        **columns_names_wines_mapper
+    }
+
+    html_template_name = 'template.html'
+    goods_source_file = 'for_project/wine2.xlsx'
+
+    template = env.get_template(html_template_name)
 
     rendered_page = template.render(
         years_of_life=str(get_years_of_life(1920, 365.25)),
-        wines=get_wines('for_project/wine.xlsx')
+        goods_by_category=get_goods_by_categories(goods_source_file,
+                                                  columns_names_goods_mapper)
     )
 
     with open('index.html', 'w', encoding='utf8') as file:
