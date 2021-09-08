@@ -76,11 +76,12 @@ def main():
 
     columns_names_goods_mapper = {
         'Категория': 'category',
-        **columns_names_wines_mapper
+        **columns_names_wines_mapper,
+        'Акция': 'best_offer'
     }
 
     html_template_name = 'template.html'
-    goods_source_file = 'for_project/wine2.xlsx'
+    goods_source_file = 'for_project/wine3.xlsx'
 
     template = env.get_template(html_template_name)
     exclusive_category = 'Напитки'
