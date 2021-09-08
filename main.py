@@ -45,7 +45,7 @@ def get_goods_by_categories(filename,
     initialized_dd = defaultdict(list)
     goods_by_categories = (
         df_table_about_goods.groupby('category')
-                            .apply(lambda g: g.to_dict(orient='records'))
+                            .apply(lambda goods: goods.to_dict(orient='records'))
                             .apply(sort_)
                             .to_dict(into=initialized_dd)
     )
