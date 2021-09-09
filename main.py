@@ -1,12 +1,13 @@
-from collections import defaultdict
 import datetime
+from collections import defaultdict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from typing import Dict, List
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
-import pandas
-
 from config import Settings
+
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+import pandas
 
 
 def get_years_of_life(year_of_origin, avg_days_in_year):
