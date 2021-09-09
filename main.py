@@ -57,7 +57,7 @@ def main():
                                                   columns_names_goods_mapper),
     )
 
-    with open('index.html', 'w', encoding='utf8') as file:
+    with open(config.HTML_SITE_PAGE, 'w', encoding='utf8') as file:
         file.write(rendered_page)
 
     server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
