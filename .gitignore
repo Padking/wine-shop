@@ -2,8 +2,9 @@
 __pycache__/
 
 # Environments
-env/
+.env
 .replit
+env/
 
 # IDE
 .vscode/

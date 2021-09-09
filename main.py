@@ -6,6 +6,8 @@ from typing import Dict, List
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import pandas
 
+from config import Settings
+
 
 def get_years_of_life(year_of_origin, avg_days_in_year):
     now = datetime.datetime.utcnow()
@@ -80,15 +82,14 @@ def main():
         'Акция': 'best_offer'
     }
 
-    html_template_name = 'template.html'
-    goods_source_file = 'for_project/wine3.xlsx'
+    config = Settings()
 
-    template = env.get_template(html_template_name)
+    template = env.get_template(config.HTML_TEMPLATE_NAME)
     exclusive_category = 'Напитки'
 
     rendered_page = template.render(
         years_of_life=str(get_years_of_life(1920, 365.25)),
-        goods_by_category=get_goods_by_categories(goods_source_file,
+        goods_by_category=get_goods_by_categories(config.GOODS_FILEPATH,
                                                   columns_names_goods_mapper),
         exclusive_category=exclusive_category
     )
